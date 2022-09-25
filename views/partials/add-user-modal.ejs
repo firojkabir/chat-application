@@ -9,7 +9,7 @@
                 <input type="text" placeholder="enter name" name="name" />
                 <p class="error name-error"></p>
 
-                <input type="text" placeholder="enter email" name="email" />
+                <input type="email" placeholder="enter email" name="email" />
                 <p class="error email-error"></p>
 
                 <input type="text" placeholder="enter mobile" name="mobile" />
@@ -54,6 +54,7 @@
         for (let i = 0; i < errorPlaceholders.length; i++) {
             errorPlaceholders[i].style.display = "none";
         }
+
         const inputErrors = document.querySelectorAll("input.error");
         if (inputErrors.length > 0) {
             for (let j = 0; j < inputErrors.length; j++) {
@@ -65,10 +66,10 @@
         const formData = new FormData(form);
 
         // send the request to server
-        let response = await fetch('/users', {
-            method: 'POST',
+        let response = await fetch("/users", {
+            method: "POST",
             body: formData,
-        })
+        });
 
         // get response
         let result = await response.json();
@@ -79,9 +80,11 @@
             Object.keys(result.errors).forEach((fieldName) => {
                 // add error class to all inputs
                 form[fieldName].classList.add("error");
+
                 // set all error placeholders (p tag) textContent
                 const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
                 errorPlaceholder.textContent = result.errors[fieldName].msg;
+
                 // make all placeholders visible
                 errorPlaceholder.style.display = "block";
             });
@@ -90,6 +93,7 @@
             successToast.showToast();
             closeModal();
             document.querySelector("p.error").style.display = "none";
+
             // reload the page after 1 second
             setTimeout(() => {
                 location.reload();

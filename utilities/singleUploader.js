@@ -1,6 +1,7 @@
 // external imports
 const multer = require("multer");
 const path = require("path");
+const createError = require("http-errors");
 
 function uploader(
   subfolder_path,
@@ -8,8 +9,8 @@ function uploader(
   max_file_size,
   error_msg
 ) {
-  // make upload object
-  const UPLOADS_FOLDER = `${__dirname}/../public/uploads/${subfolder_path}`;
+  // File upload folder
+  const UPLOADS_FOLDER = `${__dirname}/../public/uploads/${subfolder_path}/`;
 
   // define the storage
   const storage = multer.diskStorage({
@@ -18,7 +19,7 @@ function uploader(
     },
     filename: (req, file, cb) => {
       const fileExt = path.extname(file.originalname);
-      const filename =
+      const fileName =
         file.originalname
           .replace(fileExt, "")
           .toLowerCase()
@@ -31,7 +32,7 @@ function uploader(
     },
   });
 
-  // prepare the final multer upload object
+  // preapre the final multer upload object
   const upload = multer({
     storage: storage,
     limits: {
